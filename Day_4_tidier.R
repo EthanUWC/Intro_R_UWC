@@ -64,3 +64,5 @@ SACTN %>%
             sd_temp = sd(temp, na.rm = TRUE),
             min_temp = min(temp, na.rm = TRUE),
             max_temp = max(temp, na.rm = TRUE))
+
+
