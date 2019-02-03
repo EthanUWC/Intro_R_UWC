@@ -49,3 +49,8 @@ SACTN %>%
             sd_temp = sd(temp, na.rm = TRUE))
 
 # Concatinate in order to group the sequence of sites you want. Filter to only the sites you're focused on.
+
+# [A.A]
+# self made comments help when studying for the exam
+# More comments are always useful
+# Neat script

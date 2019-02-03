@@ -49,3 +49,8 @@ library(ggmap)
 
 # Load data
 load("data/cape_point_sites.RData")
+
+# [A.A]
+# Neat
+# Commenting ok, more comments would help
+# Script runs

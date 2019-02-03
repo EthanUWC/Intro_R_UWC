@@ -12,3 +12,7 @@ save(lam, file = "data/laminaria.RData")
 ??scale
 # Describe scale package
 # The scale package is a function within ggsn that offers generic plot scaling methods
+
+
+#  A bit more could be added on these package discriptions
+# Some examples are also good to explore

@@ -65,4 +65,8 @@ SACTN %>%
             min_temp = min(temp, na.rm = TRUE),
             max_temp = max(temp, na.rm = TRUE))
 
-
+#[A.A]
+# Script runs
+# Neat script
+# Nice commenting
+# Could try new things other then things done in class

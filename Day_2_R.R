@@ -141,7 +141,12 @@ chick_plot2 <- ggplot(chick_data, aes(x = Time, y = weight, colour = weight)) +
   geom_smooth(method = "lm") +
   ggtitle("weight over time") 
   
-
+# [A.A]
+# Script runs
+# Neat script
+# Sufficient commenting
+# Homework do not hve hypotheses???
+# Did not plot the laminaria data??
 
 
 

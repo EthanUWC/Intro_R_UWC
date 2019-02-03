@@ -34,3 +34,9 @@ SACTN4b_tidy <- SACTN4b %>%
 
 SACTN4_tidy <- left_join(SACTN4a_tidy, SACTN4b_tidy)
 # left_join function detects similar words in different sets of data and joins them based on them. We used it to combine the SACTN4a_tidy and SACTN4b_tidy data.
+
+# [A.A]
+# Good comments
+# Shows a clear/better understanding
+# Neat script
+# Nicely done
