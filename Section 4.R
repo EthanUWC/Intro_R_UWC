@@ -8,34 +8,44 @@ library(tidyverse)
 library(lubridate)
 library(ggpubr)
 
-# Used the dataset function to select a built-in dataset. I selected the 'orange' dataset.
-Orange <- datasets::Orange
+#Load libraries
 
-# Referred to the Orange dataset and grouped it by Tree, and then I selected the age column and used the summarise function to project the mean, min, max, median, and variance of the ages of the Trees.
-Orange %>%
-  group_by(Tree) %>%
-  select(age) %>% 
-  summarise(mean_a = mean(age),
-            min_a = min(age),
-            max_a = max(age),
-            median_a = median(age),
-            var_a = var(age))
+library(tidyverse)
 
-# Used the dataset function to select a built-in dataset. I selected the 'iris' dataset.
-iris <- datasets::iris
+co2 <- datasets::CO2#rename dataset to add it to environment
 
-# Referred to the iris dataset and grouped it by Species, and then I selected the Sepal. Length column and used the summarise function to project the mean, min, max, median, and variance of the sepal lengths of each species.
-iris %>%
-  group_by(Species) %>%
-  select(Sepal.Length) %>% 
-  summarise(mean_sl = mean(Sepal.Length),
-            min_sl = min(Sepal.Length),
-            max_sl = max(Sepal.Length),
-            median_sl = median(Sepal.Length),
-            var_sl = var(Sepal.Length))
+s_co2 <- co2 %>%#rename again and pipe
+  group_by(Type, Treatment, conc) %>% #group by certain variables, used in code
+  summarise(mn.up = mean(uptake),#summarise the mean and standard deviation uptake
+            sd.up = sd(uptake))
 
-orange_plot_1 <- ggplot(Orange, aes(x = age, y = circumference, colour = Tree)) +
-  geom_density(fill = "orange")
+ggplot(data = s_co2, aes(x = Type, y = mn.up, fill = Treatment)) +#ggplot used to plot a graph, data used from the summarised data. aes is asthetics used to plot x and y entries on axis, fill used by treatment variable
+  geom_violin() +#shape given
+  labs(x = "Place", y = "Mean uptake") +#labs used to rename x and y axis
+  ggtitle("Average uptake rate of CO in 2 sites") +#ggtitle used to give a title
+  theme()#theme added to graph
+
+datasets::ToothGrowth#loaded dataset toothgrowth
+
+mn.sd <- ToothGrowth%>% #renamed and added to environment as mn.sd then piped
+  group_by(supp, dose) %>%#group by used to group variables and then
+  summarise(mn.ln = mean(len),#summarised average length and stdv length
+            sd.ln = sd(len))
+
+
+t_plot <- ToothGrowth#renamed teeth_plot
+
+t_plot1 <- ggplot(mn.sd, aes(x = dose, y = mn.ln, fill = supp)) +#ggplot mn.sd data used
+  geom_col(aes(fill = supp), position = "dodge", colour = "black") + #geom_col used to create columns
+  geom_errorbar(aes(ymin = mn.ln - sd.ln,#geom_errorbar creates error bar
+                    ymax = mn.ln + sd.ln), 
+                position = "dodge") +
+  labs(x = "Dose (mg/d)", y = "Tooth length (mm)") +#labs used to rename x and y axis
+  ggtitle("Dosage vs tooth growth")#creates title
+
+
+
+
 
 
 
