@@ -1,0 +1,87 @@
+# Exercise_2
+# 2/02/2019
+# Ethan
+
+
+#load libraries
+library(ggpubr)
+library(tidyverse)
+library(ggsn)
+library(lubridate)
+
+
+
+#SECTION 1
+SACTN <- SACTNmonthly_v4.0 %>% 
+  filter(src == "KZNSB") 
+# loaded the SACTNmonthly_v4.0 data and assigned it a new name. I extracted the data attached to the source KZNSB.
+
+SAC <- SACTN %>% 
+  mutate(year = format(date, "%Y")) %>% 
+  group_by(site, year) %>% 
+  summarise(average_temp = mean(temp, na.rm = TRUE))
+# Assigned a new name, SAC, to the SACTN data, then used the mutate function to make a new column name year and asked R to base that column on the year. Then I grouped the data by site and year, and then used the summarise function to get the average temperate for each year. I used the na.rm function to nullify any NA data entries.
+
+SAC_gr <- ggplot(data = SAC, aes(x = year, y = average_temp)) +
+  geom_line(aes(group = site, colour = "red")) +
+  facet_wrap(~site, ncol = 5) +
+  labs(x = "Year", y = "Temperature (C)") +
+  ggtitle("KZNSB: series of annual means") +
+  scale_y_continuous(breaks = seq(20, 24, 2)) +
+  scale_x_discrete(breaks = seq(1980, 2000, 20))
+# Assigned the name SAC_gr to a graph created using ggplot with reference to the SAC data. Used geom_line to project a line graph, then used facet_wrap to seperate the clustered data/graphs into seperate graphs based on site and asked R to arrange them into 5 columns. I assigned labels and a title to the graph, then used the scale_y/ scale_x functions to arrange the digits on each axis into specified intervals. 
+
+#SECTION 2
+laminaria <- read_csv("C:/Users/PC/Desktop/R/data/laminaria.csv")
+# loaded the laminaria.csv data and assigned it a new name. 
+
+FB <- laminaria %>% 
+  filter(region == "FB")
+#I extracted the data attached to the column region with focus on False Bay's data.
+
+
+FB_plot1 <- ggplot(FB, aes(x = blade_length, y = blade_weight)) +
+  geom_line(aes(colour = site), size = 1) +
+  geom_point(aes(colour = site), size = 4) +
+  facet_wrap(~site, ncol = 3) +
+  labs(x = "Blade length (cm)", y = "Blade mass (kg)") +
+  scale_colour_brewer(palette = "Accent") +
+  ggtitle("A crazy graph of some data for False Bay sites")
+FB_plot1
+# Made a line graph with the False Bay (FB) data using ggplot. I used the aes function to assign blade length to the x-axis and blade weight to the y-axis, and then commaned R to assign colours to represent each site on each graph. I used facet_wrap to seperate the clustered data/graphs, and then assigned labels and a title to the graphs. I included the "Accent" palette to assign colour to each representative data set.
+
+FB_plot2 <- ggplot(FB, aes(x = blade_length, y = blade_weight)) +
+  geom_line(aes(colour = site), size = 1) +
+  geom_point(aes(colour = site), size = 4) +
+  facet_wrap(~site, ncol = 3) +
+  labs(x = "Blade length (cm)", y = "Blade mass (kg)") +
+  scale_colour_brewer(palette = "Set1") +
+  ggtitle("A crazy graph of some data for False Bay sites")
+FB_plot2
+# Made a line graph with the False Bay (FB) data using ggplot. I used the aes function to assign blade length to the x-axis and blade weight to the y-axis, and then commaned R to assign colours to represent each site on each graph. I used facet_wrap to seperate the clustered data/graphs, and then assigned labels and a title to the graphs. I included the "Set1" palette, because the "Accent" palette excluded certian data entries, thus they were not presented on the graphs. The "Set1" palette fixed that problem.
+
+final_plot <- ggarrange(FB_plot1, FB_plot2)
+# Used ggarrange to place the two plots on one pane.
+
+#SECTION 3
+datasets::ToothGrowth #loaded dataset toothgrowth
+
+mn.sd <- ToothGrowth%>% #Assigned a new name and added to environment as mn.sd then piped.
+  group_by(supp, dose) %>%#group by used to group variables and then
+  summarise(mn.ln = mean(len),#summarised average length and standard deviation of the length.
+            sd.ln = sd(len))
+
+
+t_plot <- ToothGrowth#renamed teeth_plot
+
+t_plot1 <- ggplot(mn.sd, aes(x = dose, y = mn.ln, fill = supp)) +#ggplot mn.sd data used to generate a graph.
+  geom_col(aes(fill = supp), position = "dodge", colour = "black") + #geom_col used to create columns
+  geom_errorbar(aes(ymin = mn.ln - sd.ln,#geom_errorbar creates error bar
+                    ymax = mn.ln + sd.ln), 
+                position = "dodge") +
+  labs(x = "Dose (mg/d)", y = "Tooth length (mm)") +#labs used to rename x and y axis
+  ggtitle("Dosage vs tooth growth")#creates title
+
+                       
+
+
