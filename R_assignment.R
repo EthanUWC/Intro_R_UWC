@@ -14,10 +14,7 @@ library(lubridate)
 
 #6.7.1
 
-head(r_dat)
-tail(r_dat)
-glimpse(r_dat)
-summary(r_dat)
+
 
 # Hypothesis: Male(A) foot size is larger than that of females(B)
 set.seed(666)
@@ -26,6 +23,12 @@ r_dat <- data.frame(dat = c(rnorm(n = 100, mean = 12, sd = 3),
                     sample = c(rep("A", 100), rep("B", 100)))
 # Assigned the name r_dat to data frame I created containing normally distributed data. This was achieved using the rnorm function in which I could specify the total amount of samples(n), the mean and sd of the data.  
 shapiro.test(r_dat$dat) # P = 0.007, thus the data is normally distributed.
+
+# First load the data and then explore the data
+head(r_dat)
+tail(r_dat)
+glimpse(r_dat)
+summary(r_dat)
 
 t.test(r_dat$dat, mu = 30) #Performed a t-test on the dat column (male and female foot size). P= 2.2e-16, thus there is a significant difference in the data. Therefore, male foot size is larger than that of females.
 
@@ -164,3 +167,9 @@ nba_heat <- ggplot(nba, aes(x = Name, y = G, fill = G)) + #assigned the name nba
                                      "#59A9BE", "#9699C4", "#CA86AD")) +#assigned a scale to the heat map
   labs(x = "Name", y = "points per game") + # labelled the x-axis 'Name' and the y-axis 'points per game'
   ggtitle("NBA player points per game heat map") #Assigned a title to the heat map
+
+# Here you make use of a dataset called nba? But you are not loading this dataset anywhere in thee script
+# Code runs
+# Add comments in the script to show the market that you understand what you are doing 
+# Try new things with R and not just copy and paste from existing code
+# This will only help you improve your Rskills
