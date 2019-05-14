@@ -1,0 +1,173 @@
+---
+title: "The cost of reproduction in male Fruitflies (Drosiphila melanogaster)"
+author: "Ethan Britz"
+date: "09 May 2019"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(Stat2Data)
+library(fitdistrplus)
+library(tidyverse)
+library(plotly)
+library(fitdistrplus)
+library(logspline)
+library(dplyr)
+library(lubridate)
+library(ggpubr)
+library(corrplot)
+library(logspline)
+library(pgirmess)
+library(rmarkdown)
+```
+
+## R Markdown
+
+#Abstract
+The hypothesis driving this study was that increased reproductive success
+would decrease longevity in male D. melanogaster and it was suspected that it
+may have been as a result of decreased time for recovery. Five groups of male
+fruit flies, Drosophila melanogaster, with 25 fruit flies in each group were
+used to test if increased reproduction reduces longevity for male fruit
+flies(Such a cost has already been established for females). The five groups
+were: males forced to live alone, males assigned to live with one or eight
+interested females, and males assigned to live with one or eight
+non-receptive females. The observations on each fly were longevity and the
+percentage of each day spent sleeping (recovery). Increased copulations
+reduced longevity in male D. melanogaster (Figure 1). A possible explanation
+for this was provided in tests on the effect of decreased recovery time on
+the longevity of the males as a result of increased copulations. Although the
+Anova test showed no significant difference between increased copulations and
+recovery time (figure 2), and correlation tests confirmed that there was no
+correlation between recovery time and longevity (figure 3), it is still
+suspected it may be a factor to consider in relation to energy costs as
+previously stated by O. Y. Martin and D. J. Hosken in 2004 in a study on the
+effect of increased copulation on the longevity of Saltella sphondylli.
+
+Key Words: Longevity; Recovery time; D. melanogaster; Male; Reproductive success; Energy costs  
+
+#Introduction
+Sexual selection is in effect when phenotypes affect an individual's mating success (Wilkinson, 1987).  Variation in heritable phenotypes will result in a change in the population mean unless those characters are opposed by selection for a different component of fitness, such as viability (Wilkinson, 1987). Due to male-male competition or female choice, equilibrium is eventually reached when the intensity of sexual selection equals the intensity of viability selection (Wilkinson, 1987).  Traits that increase male mating success causes an increase in male-male competition for mates (Wilkinson, 1987). Male-male competition results in the exaggeration of favorable traits which can be energetically costly due to the metabolic processes necessary to produce the trait (Wilkinson, 1987). Models show that the evolution of female choice increases the intensity of sexual selection changes, and when viability selection opposes the sexual selection induced by female choice a stable equilibrium is attained (Wilkinson, 1987). 
+
+Male D. melanogaster benefits from the energetic investment in preferred traits. Male energetic investment in traits that are selected for depends on female choice, and male energetic investment in reproduction in an individual female occurs until the point of copulation (Promislow, et al., 1998). Elaborate male characteristics give the females an indication of their genetic quality, thus the intensity of the production of traits that are selected for are beneficial in the sense that it increases the male's potential to be sexually successful (Promislow, et al., 1998). A male's potential to be selected by females is diluted by the number of males present in a population (Wilkinson, 1987). However, in this study the effect of male-male competition has been removed as one male will be tested on per trial.
+
+Sexual activity and reproduction requires energetic investment. A study done by Partridge et. Al. in 1987 on the effect of courtship on longevity in D. melanogaster showed that an increase in sexual reproduction is costly for both male and female D. melanogaster as it reduces their longevity (Partridge & Farquhar, 1981). Physiological energetic costs contributed towards sexual reproduction is attributed to the production of gametes and the materials associated with it (Partridge & Farquhar, 1981). A study done by O. Y. Martin and D. J. Hosken in 2004 showed that increased copulations decreased male longevity in Saltella sphondylli. This study aims to test whether (1) an increase in sexual activity will affect longevity in male D. melanogaster and (2) whether the energy invested to maximize reproductive success has an effect on the longevity of males. It is expected that increased sexual activity will decrease longevity in male D. melanogaster and it is suspected that it may be as a result decreased time for recovery. 
+
+
+
+
+
+#Methods and Materials
+Sexual activity was manipulated by supplying individual males with one or eight receptive virgin females per day. The longevity of these males was compared with that of two control types. The first control consisted of two sets of individual males kept with one or eight newly inseminated females. Newly inseminated females will not usually remate for at least two days, and thus served as a control for any effect of competition with the male for food or space. The second control was a set of individual males kept with no females. There were 25 males in each of the five groups, which were treated identically in number of anaesthetizations (using CO2) and provision of fresh food medium. 
+
+`Compliance' of the males in the two experimental groups was documented as follows: On two days per week throughout the life of each experimental male, the females that had been supplied as virgins to that male were kept and examined for fertile eggs. The amount of rest or recovery time each male had was also taken and was recorded as the amount of time that the male spent on the ground separate from females.
+The data was analysed in RStudio. To find whether the data was significantly different or not the data was subjected to ANOVA and correlation tests. Notched boxplots and histograms were produced as a graphical representation of the significant differences in the data.  
+
+#Results
+
+```{r include=FALSE}
+
+data("FruitFlies")
+
+t_plot1 <- ggplot(FruitFlies, aes(x = as.factor(Partners), y = Longevity, fill = Partners)) + 
+  geom_col(aes(fill = Treatment), position = "dodge", colour = "black") + 
+  labs(x = "Partners", y = "Longevity (days)") + 
+  theme_pubclean()+
+  ggtitle("Relationship between the amount of partners and Longevity")
+
+t_plot2 <- ggplot(FruitFlies, aes(x = as.factor(Partners), y = Sleep, fill = Partners)) + 
+  geom_col(aes(fill = Treatment), position = "dodge", colour = "black") + 
+  labs(x = "Partners", y = "Sleep (% per day)") + 
+  theme_pubclean()+
+  ggtitle("Relationship between the amount of partners and sleep")
+
+t_plot3 <- ggplot(FruitFlies, aes(x = as.factor(Partners), y = Longevity, fill = Partners)) +   
+  geom_boxplot(aes(fill = Treatment), position = "dodge", colour = "black", notch= TRUE) + 
+  labs(x = "Partners", y = "Longevity (days)") + 
+  theme_pubclean()+
+  ggtitle("Relationship between the amount of partners and longevity")
+
+t_plot4 <- ggplot(FruitFlies, aes(x = as.factor(Partners), y = Sleep, fill = Partners)) + 
+  geom_boxplot(aes(fill = Treatment), position = "dodge", colour = "black", notch= TRUE) + 
+  labs(x = "Partners", y = "Sleep (% per day)") + 
+  theme_pubclean()+
+  ggtitle("Relationship between the amount of partners and sleep")
+
+final_plot3 <- ggarrange(t_plot1, t_plot3, nrow = 2)
+
+final_plot2 <- ggarrange(t_plot2, t_plot4, nrow = 2) 
+
+summary(aov(Sleep ~ Partners, data = FruitFlies))
+
+compare_means(Sleep ~ Partners, data = FruitFlies, method = "kruskal.test")
+kruskalmc(Sleep ~ Partners, data = FruitFlies)
+
+
+
+summary(aov(Longevity ~ Partners, data = FruitFlies))
+
+compare_means(Longevity ~ Partners, data = FruitFlies, method = "kruskal.test")
+kruskalmc(Longevity ~ Partners, data = FruitFlies)
+
+
+cor.test(x = FruitFlies$Longevity, FruitFlies$Sleep,
+         use = "everything", method = "pearson") 
+
+r_print <- paste0("r = ", 
+                  round(cor(x =  FruitFlies$Longevity, FruitFlies$Sleep),2))
+
+
+longSL<- ggplot(data = FruitFlies, aes(x = Sleep, y = Longevity)) +
+  geom_smooth(method = "lm", colour = "black", se = F) +
+  geom_point(colour = "mediumorchid4") +
+  geom_label(x = 300, y = 240, label = r_print) +
+  labs(x = "Sleep (% per day)", y = "Longevity (days)") +
+  theme_pubclean() +
+  ggtitle("The relationship between Longevity and Sleep")
+
+
+```
+
+```{r echo=FALSE, fig.cap="Figure 1:  The effect that the amount of partners a male is paired with has on its longevity", fig.width=8, fig.height=8}
+final_plot3
+```
+
+Males lived longer when placed with pregnant females, as well as isolated males. Males that were placed with eight pregnant females lived the longest. Interaction with virgin females reduced the longevity of the males placed with them and that reduction in longevity intensified as the amount of virgin females increased.  There was a significant difference between the males placed with eight females and their consequential longevity, as well as for the longevity of males placed with one female against males placed with eight females as confirmed by an Anova (Df= 1 (Partners), 123 (Residuals); Sum sq. = 3513 (Partners), 34740 (Residuals); F = 12.44; Pr (>F) =0.000592) and Kruskal-wallis tests. However, there was no significant difference in longevity between isolated males and males placed with one female.
+
+```{r echo=FALSE, fig.cap="Figure 2:  The effect that the amount of partners a male is paired with has on the percentage of sleep it gets per day", fig.width=8, fig.height=8}
+final_plot2
+```
+
+There was no significant difference between the amount partners and the resultant sleep males got as confirmed by an anova (Df= 1 (Partners), 123 (Residuals); Sum sq. = 10 (Partners), 31255 (Residuals); F = 0.04; Pr (>F) =0.842) and Kruskal-wallis tests. However, males that were placed with virgins slept more than isolated males and males placed with inseminated females.
+
+```{r echo=FALSE, fig.cap="Figure 3:  The correlation between the percentage of sleep males get per day and their longevity ", fig.width=8, fig.height=8}
+longSL
+```
+
+There is no correlation between the amount of sleep males got per day and their longevity as confirmed by a Pearson's correlation test (t = 0.046, df = 123, p = 0.963, cor. = 0.004). 
+
+
+
+## Discussion
+The hypothesis driving this study was that increased reproductive success would decrease longevity in male D. melanogaster and it was suspected that it may have been as a result of decreased time for recovery. The longevity in males was lower than that of the controls and longevity decreased when males were placed with more females (Figure 1). This is testament to the amount of energy invested in sexual reproduction. The more virgin females a male was placed with the less time he took to recover (Figure 2), although tests for correlation between longevity and the amount of rest a males had per day showed no correlation between the two variables (Figure 3). Decreased recovery time as a result of increased sexual partners is still suspected to be an important factor explaining decreased longevity in males as it is expected that the decreased recovery demands increased metabolic rates in order to produce sperm and accessory proteins faster (Promislow, et al., 1998; Nuzhdin, et al., 1997) coupled with the decreased time resting after copulation in order to find another mate. Further investigation will have to be done on the effect of decreased recovery time as a result of increased sexual partners on male D. melanogaster. However, the data supports the hypothesis. This study was limited in the amount of females allowed to each male (either 0, 1 or 8), thus a repeat of the study with increased amount of partners per male is encouraged as the effect of increased partners on male longevity would be more clearly represented and a clear graphical representation of the amount of recovery time each male had and whether it had a clear effect on longevity as suspected.
+
+This study confirms work done by Partridge et. Al. in 1987 reflecting the energy costs of male D. melanogaster in relation to increased reproductive success. This study potentially explains the equilibrating effect of male-male completion. Female choice similarly controls the amount of partners a male acquires (Wilkinson, 1987). A study done by O. Y. Martin and D. J. Hosken in 2004 on Saltella sphondylli confirmed that the energy costs involved in sexual activity, particularly focused on increased male reproductive success, and explained that energy costs to males was as a result of investment in courtship or sexual signaling, and mate searching (Martin & Hosken, 2003). Therefore, less time to recover from mate searching would be relatively more energetically costly. Excessive energy costs can also be explained by harassment by males when females do not see the male as a mate (Martin & Hosken, 2003)
+
+##Conclusion
+
+Increased copulations reduced longevity in male D. melanogaster (Figure 1). A possible explanation for this was provided in tests on the effect of decreased recovery time on the longevity of the males as a result of increased copulations. Although the Anova test showed no significant difference between increased copulations and recovery time (figure 2), and correlation tests confirmed that there was no correlation between recovery time and longevity (figure 3), it is still suspect it may be a factor to consider in relation to energy costs as previously stated by O. Y. Martin and D. J. Hosken in 2004 in a study on the effect of increased copulation on the longevity of Saltella sphondylli.
+
+
+##References
+
+1.	Martin, O. Y. & Hosken, D. J., 2003. Copulation reduces male but not female longevity in Saltella sphondylli (Diptera: Sepsidae). Journal of Evolutionary Biology, 17(2), pp. 357-362.
+2.	Nuzhdin, S. V. et al., 1997. Sex-specific quantitative trait loci affecting longevity in Drosophila melanogaster. PNAS, 94(18), pp. 9734-9739.
+3.	Partridge, L. & Farquhar, M., 1981. Sexual Activity and the Lifespan of Male Fruitflies. Nature, Volume 294, pp. 580-581.
+4.	Promislow, D. E., Smith, E. A. & Pearse, L., 1998. Adult fitness consequences of sexual selection in Drosophila melanogaster. Proc. Natl. Acad. Sci. , Volume 95, p. 10687-10692.
+5.	Wilkinson, G., 1987. EQUILIBRIUM ANALYSIS OF SEXUAL SELECTION IN DROSOPHILA MELANOGASTER. Evolution, 41(1), pp. 11-21.
+
